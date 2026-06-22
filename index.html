@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Veltaro | Diseño Web para Pequeñas y Medianas Empresas</title>
+<meta name="description" content="Veltaro es una agencia de diseño web enfocada en la transformación digital de pequeñas y medianas empresas. Soluciones accesibles, profesionales y de alta calidad." />
+
+<!-- Tipografía moderna (Montserrat para títulos, Inter para texto) -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Montserrat:wght@600;700;800&display=swap" rel="stylesheet">
+
+<style>
+  /* ============================================================
+     VARIABLES DE DISEÑO — Paleta corporativa azul / marino / pizarra
+     ============================================================ */
+  :root{
+    --navy-950: #060d1a;   /* fondo más profundo */
+    --navy-900: #0a1628;   /* fondo principal */
+    --navy-800: #0f2138;   /* superficies */
+    --navy-700: #14304f;   /* superficies elevadas */
+    --slate-600: #334155;  /* gris pizarra */
+    --slate-500: #475569;  /* bordes */
+    --slate-400: #94a3b8;  /* texto secundario */
+    --accent:    #3b82f6;  /* azul tecnológico */
+    --accent-2:  #38bdf8;  /* cian de acento */
+    --white:     #f1f5f9;  /* texto principal */
+    --pure:      #ffffff;
+
+    --radius: 14px;
+    --maxw: 1180px;
+    --ease: cubic-bezier(.16,.84,.44,1);
+    --shadow: 0 24px 60px -20px rgba(2,8,20,.75);
+  }
+
+  *{ margin:0; padding:0; box-sizing:border-box; }
+  html{ scroll-behavior:smooth; }
+
+  body{
+    font-family:'Inter', system-ui, -apple-system, sans-serif;
+    background:
+      radial-gradient(900px 500px at 80% -10%, rgba(59,130,246,.16), transparent 60%),
+      radial-gradient(700px 500px at -10% 20%, rgba(56,189,248,.10), transparent 55%),
+      var(--navy-900);
+    color:var(--white);
+    line-height:1.65;
+    -webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
+  }
+
+  h1,h2,h3,.logo{ font-family:'Montserrat', sans-serif; letter-spacing:-.02em; line-height:1.12; }
+
+  a{ text-decoration:none; color:inherit; }
+  .container{ width:100%; max-width:var(--maxw); margin:0 auto; padding:0 24px; }
+
+  .eyebrow{
+    display:inline-flex; align-items:center; gap:8px;
+    font-size:.78rem; font-weight:600; letter-spacing:.18em; text-transform:uppercase;
+    color:var(--accent-2);
+  }
+  .eyebrow::before{ content:""; width:26px; height:1px; background:var(--accent-2); display:inline-block; }
+
+  /* ============================================================
+     HEADER / NAVEGACIÓN FIJA
+     ============================================================ */
+  header{
+    position:fixed; top:0; left:0; right:0; z-index:1000;
+    transition:background .35s var(--ease), border-color .35s var(--ease), backdrop-filter .35s;
+    border-bottom:1px solid transparent;
+  }
+  header.scrolled{
+    background:rgba(8,18,33,.82);
+    backdrop-filter:blur(14px);
+    border-bottom:1px solid rgba(71,85,105,.35);
+  }
+  .nav-inner{ display:flex; align-items:center; justify-content:space-between; height:74px; }
+
+  .logo{ display:flex; align-items:center; gap:11px; font-weight:800; font-size:1.32rem; color:var(--pure); }
+  .logo .mark{
+    width:34px; height:34px; border-radius:9px;
+    background:linear-gradient(140deg, var(--accent), var(--accent-2));
+    display:grid; place-items:center; box-shadow:0 8px 22px -8px rgba(59,130,246,.8);
+  }
+  .logo .mark svg{ width:18px; height:18px; }
+  .logo span b{ color:var(--accent-2); font-weight:800; }
+
+  .nav-links{ display:flex; align-items:center; gap:6px; }
+  .nav-links a{
+    font-size:.94rem; font-weight:500; color:var(--slate-400);
+    padding:9px 16px; border-radius:8px; transition:color .25s, background .25s;
+  }
+  .nav-links a:hover{ color:var(--pure); background:rgba(71,85,105,.22); }
+
+  .menu-btn{
+    display:none; background:transparent; border:1px solid var(--slate-500);
+    border-radius:9px; width:44px; height:44px; cursor:pointer; color:var(--white);
+    place-items:center;
+  }
+  .menu-btn svg{ width:22px; height:22px; }
+
+  /* ============================================================
+     HERO
+     ============================================================ */
+  .hero{ position:relative; padding:170px 0 110px; overflow:hidden; }
+  .grid-bg{
+    position:absolute; inset:0;
+    background-image:
+      linear-gradient(rgba(71,85,105,.10) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(71,85,105,.10) 1px, transparent 1px);
+    background-size:54px 54px;
+    -webkit-mask-image:radial-gradient(700px 480px at 70% 30%, #000 30%, transparent 75%);
+    mask-image:radial-gradient(700px 480px at 70% 30%, #000 30%, transparent 75%);
+    pointer-events:none;
+  }
+  .hero-inner{ position:relative; max-width:780px; }
+  .hero h1{
+    font-size:clamp(2.4rem, 6vw, 4.1rem); font-weight:800; margin:22px 0 20px;
+    color:var(--pure);
+  }
+  .hero h1 .grad{
+    background:linear-gradient(110deg, var(--accent-2), var(--accent));
+    -webkit-background-clip:text; background-clip:text; color:transparent;
+  }
+  .hero p{ font-size:clamp(1.02rem,2vw,1.22rem); color:var(--slate-400); max-width:620px; margin-bottom:38px; }
+
+  .btn{
+    display:inline-flex; align-items:center; justify-content:center; gap:10px;
+    font-family:'Inter',sans-serif; font-weight:600; font-size:1rem; cursor:pointer;
+    padding:15px 30px; border-radius:11px; border:1px solid transparent;
+    transition:transform .25s var(--ease), box-shadow .25s, background .25s, border-color .25s;
+  }
+  .btn svg{ width:19px; height:19px; }
+  .btn-primary{
+    background:linear-gradient(135deg, var(--accent), var(--accent-2));
+    color:var(--navy-950); box-shadow:0 16px 34px -12px rgba(59,130,246,.7);
+  }
+  .btn-primary:hover{ transform:translateY(-3px); box-shadow:0 22px 42px -12px rgba(59,130,246,.85); }
+
+  .hero-stats{ display:flex; gap:46px; margin-top:60px; flex-wrap:wrap; }
+  .hero-stats .stat strong{ font-family:'Montserrat'; font-size:1.9rem; font-weight:800; color:var(--pure); display:block; }
+  .hero-stats .stat span{ font-size:.85rem; color:var(--slate-400); letter-spacing:.02em; }
+
+  /* ============================================================
+     SECCIONES GENERALES
+     ============================================================ */
+  section{ position:relative; }
+  .block{ padding:104px 0; }
+  .head{ max-width:640px; margin-bottom:56px; }
+  .head h2{ font-size:clamp(1.9rem,4vw,2.7rem); font-weight:700; margin:16px 0 0; color:var(--pure); }
+
+  /* SOBRE NOSOTROS */
+  #sobre{ background:linear-gradient(180deg, transparent, rgba(15,33,56,.5), transparent); }
+  .about-grid{ display:grid; grid-template-columns:1.15fr .85fr; gap:54px; align-items:center; }
+  .about-text p{ color:var(--slate-400); font-size:1.08rem; margin-bottom:18px; }
+  .about-text p strong{ color:var(--white); font-weight:600; }
+
+  .pillars{ display:grid; gap:16px; }
+  .pillar{
+    display:flex; gap:16px; align-items:flex-start;
+    background:rgba(15,33,56,.55); border:1px solid rgba(71,85,105,.35);
+    border-radius:var(--radius); padding:20px 22px;
+    transition:transform .3s var(--ease), border-color .3s, background .3s;
+  }
+  .pillar:hover{ transform:translateX(5px); border-color:rgba(59,130,246,.55); background:rgba(20,48,79,.6); }
+  .pillar .ic{
+    flex:none; width:44px; height:44px; border-radius:11px;
+    background:rgba(59,130,246,.14); color:var(--accent-2);
+    display:grid; place-items:center; border:1px solid rgba(59,130,246,.3);
+  }
+  .pillar .ic svg{ width:22px; height:22px; }
+  .pillar h3{ font-size:1.02rem; font-weight:600; color:var(--pure); margin-bottom:3px; font-family:'Inter'; letter-spacing:0; }
+  .pillar p{ font-size:.9rem; color:var(--slate-400); line-height:1.5; }
+
+  /* CATÁLOGO */
+  .cards{ display:grid; grid-template-columns:repeat(3,1fr); gap:26px; }
+  .card{
+    background:linear-gradient(180deg, rgba(15,33,56,.85), rgba(10,22,40,.85));
+    border:1px solid rgba(71,85,105,.4); border-radius:18px; overflow:hidden;
+    transition:transform .35s var(--ease), border-color .35s, box-shadow .35s;
+    display:flex; flex-direction:column;
+  }
+  .card:hover{ transform:translateY(-8px); border-color:rgba(59,130,246,.6); box-shadow:var(--shadow); }
+  .card-thumb{
+    position:relative; aspect-ratio:16/10;
+    background:
+      linear-gradient(135deg, rgba(71,85,105,.55), rgba(51,65,85,.35)),
+      var(--slate-600);
+    display:grid; place-items:center; color:var(--slate-400);
+    border-bottom:1px solid rgba(71,85,105,.4);
+  }
+  .card-thumb::after{
+    content:""; position:absolute; inset:0;
+    background-image:linear-gradient(rgba(148,163,184,.08) 1px, transparent 1px),
+                     linear-gradient(90deg, rgba(148,163,184,.08) 1px, transparent 1px);
+    background-size:26px 26px;
+  }
+  .card-thumb svg{ width:46px; height:46px; opacity:.55; position:relative; }
+  .card-body{ padding:24px 24px 26px; display:flex; flex-direction:column; flex:1; }
+  .card-body h3{ font-size:1.22rem; font-weight:700; color:var(--pure); margin-bottom:9px; }
+  .card-body p{ font-size:.93rem; color:var(--slate-400); margin-bottom:20px; flex:1; }
+  .tags{ display:flex; flex-wrap:wrap; gap:8px; }
+  .tag{
+    font-size:.74rem; font-weight:600; letter-spacing:.03em;
+    padding:6px 12px; border-radius:7px;
+    background:rgba(59,130,246,.12); color:var(--accent-2);
+    border:1px solid rgba(59,130,246,.25);
+  }
+
+  /* CONTACTO */
+  #contacto{ text-align:center; }
+  .contact-wrap{
+    background:
+      radial-gradient(600px 300px at 50% -20%, rgba(59,130,246,.2), transparent 65%),
+      linear-gradient(180deg, rgba(15,33,56,.8), rgba(10,22,40,.9));
+    border:1px solid rgba(71,85,105,.4); border-radius:24px;
+    padding:72px 30px; max-width:920px; margin:0 auto;
+  }
+  .contact-wrap h2{ font-size:clamp(1.9rem,4vw,2.7rem); margin:16px 0 14px; color:var(--pure); }
+  .contact-wrap > p{ color:var(--slate-400); font-size:1.1rem; max-width:560px; margin:0 auto 44px; }
+
+  .contact-buttons{ display:grid; grid-template-columns:repeat(3,1fr); gap:18px; max-width:760px; margin:0 auto; }
+  .cbtn{
+    display:flex; flex-direction:column; align-items:center; gap:12px;
+    padding:30px 18px; border-radius:16px; cursor:pointer;
+    background:rgba(20,48,79,.5); border:1px solid rgba(71,85,105,.45);
+    color:var(--white); font-weight:600; font-size:1.02rem;
+    transition:transform .3s var(--ease), border-color .3s, background .3s, box-shadow .3s;
+  }
+  .cbtn small{ font-weight:400; font-size:.82rem; color:var(--slate-400); }
+  .cbtn .cic{ width:54px; height:54px; border-radius:14px; display:grid; place-items:center; transition:transform .3s var(--ease); }
+  .cbtn .cic svg{ width:27px; height:27px; }
+  .cbtn:hover{ transform:translateY(-6px); border-color:rgba(59,130,246,.6); background:rgba(20,48,79,.75); box-shadow:var(--shadow); }
+  .cbtn:hover .cic{ transform:scale(1.08); }
+
+  .cbtn.ig .cic{ background:linear-gradient(135deg,#833ab4,#fd1d1d,#fcb045); color:#fff; }
+  .cbtn.wa .cic{ background:#25d366; color:#06381d; }
+  .cbtn.mail .cic{ background:linear-gradient(135deg,var(--accent),var(--accent-2)); color:var(--navy-950); }
+
+  /* FOOTER */
+  footer{ border-top:1px solid rgba(71,85,105,.3); padding:34px 0; margin-top:40px; }
+  .foot-inner{ display:flex; align-items:center; justify-content:space-between; gap:18px; flex-wrap:wrap; }
+  .foot-inner p{ color:var(--slate-400); font-size:.88rem; }
+
+  /* ANIMACIÓN DE APARICIÓN */
+  .reveal{ opacity:0; transform:translateY(26px); transition:opacity .7s var(--ease), transform .7s var(--ease); }
+  .reveal.in{ opacity:1; transform:none; }
+
+  /* ============================================================
+     RESPONSIVO
+     ============================================================ */
+  @media (max-width:900px){
+    .about-grid{ grid-template-columns:1fr; gap:38px; }
+    .cards{ grid-template-columns:1fr; }
+  }
+  @media (max-width:760px){
+    .menu-btn{ display:grid; }
+    .nav-links{
+      position:fixed; top:74px; left:0; right:0;
+      flex-direction:column; align-items:stretch; gap:4px;
+      background:rgba(8,18,33,.97); backdrop-filter:blur(14px);
+      border-bottom:1px solid rgba(71,85,105,.4);
+      padding:14px 20px 22px;
+      transform:translateY(-130%); transition:transform .4s var(--ease);
+    }
+    .nav-links.open{ transform:translateY(0); }
+    .nav-links a{ padding:14px 16px; font-size:1rem; }
+    .hero{ padding:140px 0 80px; }
+    .block{ padding:78px 0; }
+    .hero-stats{ gap:30px; }
+    .contact-buttons{ grid-template-columns:1fr; }
+    .contact-wrap{ padding:54px 22px; }
+  }
+
+  @media (prefers-reduced-motion:reduce){
+    *{ animation:none !important; transition:none !important; }
+    html{ scroll-behavior:auto; }
+    .reveal{ opacity:1; transform:none; }
+  }
+
+  /* Accesibilidad: foco visible */
+  a:focus-visible, button:focus-visible, .btn:focus-visible{
+    outline:2px solid var(--accent-2); outline-offset:3px; border-radius:8px;
+  }
+</style>
+</head>
+<body>
+
+<!-- ===================== HEADER ===================== -->
+<header id="top">
+  <div class="container nav-inner">
+    <a href="#top" class="logo" aria-label="Veltaro inicio">
+      <span class="mark" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#06121f" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M3 5l9 14 9-14"/>
+        </svg>
+      </span>
+      <span>Vel<b>taro</b></span>
+    </a>
+
+    <nav class="nav-links" id="navLinks">
+      <a href="#top">Inicio</a>
+      <a href="#sobre">Sobre Nosotros</a>
+      <a href="#catalogo">Catálogo</a>
+      <a href="#contacto">Contáctanos</a>
+    </nav>
+
+    <button class="menu-btn" id="menuBtn" aria-label="Abrir menú" aria-expanded="false">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+        <line x1="4" y1="7" x2="20" y2="7"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="17" x2="20" y2="17"/>
+      </svg>
+    </button>
+  </div>
+</header>
+
+<!-- ===================== HERO ===================== -->
+<section class="hero" id="inicio">
+  <div class="grid-bg" aria-hidden="true"></div>
+  <div class="container hero-inner reveal">
+    <span class="eyebrow">Agencia de diseño digital</span>
+    <h1>Diseño web profesional para <span class="grad">pequeñas y medianas empresas</span></h1>
+    <p>Impulsamos tu transformación digital con sitios modernos, rápidos y a la medida de tu negocio. Tu marca merece una presencia en línea que genere confianza y resultados.</p>
+    <a href="#catalogo" class="btn btn-primary">
+      Ver Catálogo
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+    </a>
+
+    <div class="hero-stats">
+      <div class="stat"><strong>100%</strong><span>Diseño responsivo</span></div>
+      <div class="stat"><strong>UI/UX</strong><span>Centrado en el usuario</span></div>
+      <div class="stat"><strong>PYMES</strong><span>Nuestra especialidad</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== SOBRE NOSOTROS ===================== -->
+<section class="block" id="sobre">
+  <div class="container about-grid">
+    <div class="about-text reveal">
+      <span class="eyebrow">Quiénes somos</span>
+      <h2 style="margin:16px 0 22px;">Sobre Veltaro</h2>
+      <p>En <strong>Veltaro</strong> somos creadores digitales apasionados por el estilo, la creación y el diseño. Convertimos ideas en experiencias web claras, atractivas y funcionales que conectan con tu audiencia.</p>
+      <p>Nos mantenemos a la vanguardia de las tendencias tecnológicas para ofrecer un servicio de primer nivel, enfocado en <strong>potenciar el crecimiento de pequeñas y medianas empresas</strong> a través de soluciones web accesibles y de alta calidad.</p>
+      <p>Cada proyecto es una colaboración: escuchamos tus objetivos, cuidamos cada detalle y entregamos un producto que representa con orgullo lo que tu negocio significa.</p>
+    </div>
+
+    <div class="pillars reveal">
+      <div class="pillar">
+        <div class="ic" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l8 4.5v9L12 21l-8-4.5v-9L12 3z"/><path d="M12 12l8-4.5M12 12v9M12 12L4 7.5"/></svg>
+        </div>
+        <div><h3>Diseño con propósito</h3><p>Estética cuidada al servicio de tus objetivos de negocio.</p></div>
+      </div>
+      <div class="pillar">
+        <div class="ic" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L3 14h7l-1 8 10-12h-7l1-8z"/></svg>
+        </div>
+        <div><h3>Vanguardia tecnológica</h3><p>Trabajamos con las últimas tendencias y mejores prácticas.</p></div>
+      </div>
+      <div class="pillar">
+        <div class="ic" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        </div>
+        <div><h3>Enfoque en PYMES</h3><p>Soluciones accesibles pensadas para hacer crecer tu empresa.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== CATÁLOGO ===================== -->
+<section class="block" id="catalogo">
+  <div class="container">
+    <div class="head reveal">
+      <span class="eyebrow">Nuestro trabajo</span>
+      <h2>Catálogo de proyectos</h2>
+    </div>
+
+    <div class="cards">
+      <!-- Proyecto 1 -->
+      <article class="card reveal">
+        <div class="card-thumb">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 11h18M5 11V6a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v5M6 11v8a1 1 0 0 0 1 1h10a1 1 0 0 0 1-1v-8M9 4v3M15 4v3"/></svg>
+        </div>
+        <div class="card-body">
+          <h3><a href="bistro.html" target="_blank" rel="noopener noreferrer">Bistró del Mar</a></h3>
+          <p>Diseño de menú digital interactivo para restaurante, con navegación fluida por categorías y una experiencia visual apetecible en cualquier dispositivo.</p>
+          <div class="tags"><span class="tag">Responsive</span><span class="tag">UI/UX</span><span class="tag">Menú digital</span></div>
+        </div>
+      </article>
+
+      <!-- Proyecto 2 -->
+      <article class="card reveal">
+        <div class="card-thumb">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 21h18M6 21V7l6-4 6 4v14M10 21v-5h4v5M9 10h.01M15 10h.01M9 13h.01M15 13h.01"/></svg>
+        </div>
+        <div class="card-body">
+          <h3><a href="bufete.html" target="_blank" rel="noopener noreferrer">Bufete Corporativo</a></h3>
+          <p>Web de servicios legales con sistema de citas en línea, diseñada para transmitir profesionalismo y facilitar el primer contacto con cada cliente.</p>
+          <div class="tags"><span class="tag">Citas online</span><span class="tag">Corporativo</span><span class="tag">UI/UX</span></div>
+        </div>
+      </article>
+
+      <!-- Proyecto 3 -->
+      <article class="card reveal">
+        <div class="card-thumb">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2v11z"/><circle cx="12" cy="13" r="4"/></svg>
+        </div>
+        <div class="card-body">
+          <h3><a href="estudio.html" target="_blank" rel="noopener noreferrer">Estudio Visual</a></h3>
+          <p>Portafolio dinámico para fotografía profesional, con galerías que destacan cada imagen y una estructura pensada para captar nuevos clientes.</p>
+          <div class="tags"><span class="tag">Portafolio</span><span class="tag">Responsive</span><span class="tag">Galería</span></div>
+        </div>
+      </article>
+
+      <!-- Proyecto 4 -->
+      <article class="card reveal">
+        <div class="card-thumb">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="6" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><line x1="20" y1="4" x2="8.12" y2="15.88"/><line x1="14.47" y1="14.48" x2="20" y2="20"/><line x1="8.12" y1="8.12" x2="12" y2="12"/></svg>
+        </div>
+        <div class="card-body">
+          <h3><a href="barberia.html" target="_blank" rel="noopener noreferrer">Corte &amp; Filo</a></h3>
+          <p>Sitio web urbano para barbería con lista de precios dinámica y perfiles del equipo, en un diseño oscuro y elegante que refleja la identidad de la marca.</p>
+          <div class="tags"><span class="tag">Dark Mode</span><span class="tag">Precios Dinámicos</span><span class="tag">UI/UX</span></div>
+        </div>
+      </article>
+
+      <!-- Proyecto 5 -->
+      <article class="card reveal">
+        <div class="card-thumb">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5.5c-2-2-5-2.5-6.5-1C3.5 6 3.5 9 4.5 13c.7 2.8 1.2 6 2.8 6 1.4 0 1.3-2.5 2.7-2.5h0c1.4 0 1.3 2.5 2.7 2.5 1.6 0 2.1-3.2 2.8-6 1-4 1-7-1-8.5-1.5-1.5-4.5-1-6.2 1"/></svg>
+        </div>
+        <div class="card-body">
+          <h3><a href="odontologo.html" target="_blank" rel="noopener noreferrer">Sonrisa Vital</a></h3>
+          <p>Web clínica enfocada en la generación de confianza, con un slider interactivo de Antes y Después que muestra resultados reales de los tratamientos.</p>
+          <div class="tags"><span class="tag">Salud</span><span class="tag">Slider Interactivo</span><span class="tag">Responsive</span></div>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== CONTACTO ===================== -->
+<section class="block" id="contacto">
+  <div class="container">
+    <div class="contact-wrap reveal">
+      <span class="eyebrow" style="justify-content:center;">Hablemos</span>
+      <h2>Cotiza tu proyecto hoy</h2>
+      <p>Cuéntanos tu idea y diseñemos juntos la presencia digital que tu empresa necesita. Estamos a un mensaje de distancia.</p>
+
+      <div class="contact-buttons">
+        <a class="cbtn ig" href="https://www.instagram.com/__veltaro__" target="_blank" rel="noopener noreferrer">
+          <span class="cic" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><line x1="17.5" y1="6.5" x2="17.5" y2="6.5"/></svg>
+          </span>
+          Instagram
+          <small>Mira nuestro trabajo</small>
+        </a>
+
+        <a class="cbtn wa" href="https://wa.me/50361093132" target="_blank" rel="noopener noreferrer">
+          <span class="cic" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12.04 2c-5.46 0-9.91 4.45-9.91 9.91 0 1.75.46 3.45 1.32 4.95L2 22l5.25-1.38a9.9 9.9 0 0 0 4.79 1.22c5.46 0 9.91-4.45 9.91-9.91S17.5 2 12.04 2zm5.8 14.06c-.25.69-1.44 1.32-1.99 1.4-.53.08-1.18.11-1.9-.12-.44-.14-1-.32-1.72-.63-3.02-1.3-4.99-4.35-5.14-4.55-.15-.2-1.23-1.64-1.23-3.13s.78-2.22 1.06-2.52c.28-.3.61-.38.81-.38h.58c.19 0 .44-.07.69.53.25.6.85 2.08.93 2.23.07.15.12.33.02.53-.1.2-.15.33-.3.51-.15.18-.31.4-.45.53-.15.15-.3.31-.13.61.17.3.76 1.25 1.63 2.02 1.12.99 2.06 1.3 2.36 1.45.3.15.47.13.65-.08.18-.2.74-.86.94-1.16.2-.3.4-.25.67-.15.27.1 1.72.81 2.02.96.3.15.5.22.57.35.07.13.07.74-.18 1.43z"/></svg>
+          </span>
+          WhatsApp
+          <small>Escríbenos directo</small>
+        </a>
+
+        <a class="cbtn mail" href="mailto:dlopez.sellers@gmail.com">
+          <span class="cic" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M3 6l9 7 9-7"/></svg>
+          </span>
+          Correo Electrónico
+          <small>dlopez.sellers@gmail.com</small>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== FOOTER ===================== -->
+<footer>
+  <div class="container foot-inner">
+    <a href="#top" class="logo" style="font-size:1.1rem;">
+      <span class="mark" aria-hidden="true" style="width:28px;height:28px;">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#06121f" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M3 5l9 14 9-14"/></svg>
+      </span>
+      <span>Vel<b>taro</b></span>
+    </a>
+    <p>&copy; 2026 Veltaro. Diseño web para pequeñas y medianas empresas.</p>
+  </div>
+</footer>
+
+<script>
+  /* Header con efecto al hacer scroll */
+  const header = document.getElementById('top');
+  const onScroll = () => header.classList.toggle('scrolled', window.scrollY > 20);
+  window.addEventListener('scroll', onScroll, { passive:true });
+  onScroll();
+
+  /* Menú móvil */
+  const menuBtn = document.getElementById('menuBtn');
+  const navLinks = document.getElementById('navLinks');
+  menuBtn.addEventListener('click', () => {
+    const open = navLinks.classList.toggle('open');
+    menuBtn.setAttribute('aria-expanded', open);
+  });
+  navLinks.querySelectorAll('a').forEach(a =>
+    a.addEventListener('click', () => {
+      navLinks.classList.remove('open');
+      menuBtn.setAttribute('aria-expanded', false);
+    })
+  );
+
+  /* Animación de aparición al hacer scroll */
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); } });
+  }, { threshold:.14 });
+  document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+</script>
+
+<!-- Conmutador de idioma ES / EN (traducción persistente entre páginas) -->
+<script src="i18n.js"></script>
+
+</body>
+</html>

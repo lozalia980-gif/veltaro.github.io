@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Corte &amp; Filo — Barbería Clásica</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Oswald:wght@400;500;600;700&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --onyx:#0e0e10;
+    --onyx-2:#16161a;
+    --onyx-3:#1f1f24;
+    --cream:#f4f1ea;
+    --muted:#a39e93;
+    --gold:#c9a44c;
+    --gold-2:#e8c878;
+    --copper:#b87333;
+    --line:#2c2c31;
+    --shadow:0 18px 45px rgba(0,0,0,.55);
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    font-family:'Roboto',sans-serif;
+    background:var(--onyx);
+    color:var(--cream);
+    line-height:1.6;
+    overflow-x:hidden;
+  }
+  h1,h2,h3,.brand{font-family:'Oswald',sans-serif;letter-spacing:.5px}
+  .display{font-family:'Anton',sans-serif;font-weight:400;letter-spacing:1px}
+  a{color:inherit;text-decoration:none}
+  .container{width:100%;max-width:1180px;margin:0 auto;padding:0 22px}
+  .gold{color:var(--gold)}
+
+  /* Buttons */
+  .btn{
+    display:inline-flex;align-items:center;gap:.6rem;
+    background:linear-gradient(135deg,var(--gold),var(--gold-2));
+    color:#1a1409;font-family:'Oswald',sans-serif;font-weight:600;
+    text-transform:uppercase;letter-spacing:1.5px;font-size:.9rem;
+    padding:14px 30px;border:none;border-radius:2px;cursor:pointer;
+    transition:transform .25s ease,box-shadow .25s ease;
+    box-shadow:0 10px 25px rgba(201,164,76,.28);
+  }
+  .btn:hover{transform:translateY(-3px);box-shadow:0 16px 34px rgba(201,164,76,.42)}
+  .btn svg{width:18px;height:18px}
+
+  /* Header */
+  header{
+    position:fixed;top:0;left:0;width:100%;z-index:1000;
+    background:rgba(14,14,16,.55);backdrop-filter:blur(10px);
+    border-bottom:1px solid transparent;transition:background .3s,border-color .3s;
+  }
+  header.scrolled{background:rgba(14,14,16,.95);border-bottom:1px solid var(--line)}
+  .nav{display:flex;align-items:center;justify-content:space-between;height:72px}
+  .brand{display:flex;align-items:center;gap:.65rem;font-size:1.4rem;font-weight:700;text-transform:uppercase}
+  .brand svg{width:30px;height:30px}
+  .brand b{color:var(--gold)}
+  .nav-links{display:none;gap:2rem;list-style:none}
+  .nav-links a{font-family:'Oswald',sans-serif;text-transform:uppercase;letter-spacing:1px;font-size:.92rem;color:var(--cream);position:relative;padding:6px 0}
+  .nav-links a::after{content:"";position:absolute;left:0;bottom:0;width:0;height:2px;background:var(--gold);transition:width .3s}
+  .nav-links a:hover{color:var(--gold)}
+  .nav-links a:hover::after{width:100%}
+  .menu-toggle{background:none;border:none;color:var(--cream);cursor:pointer;display:flex}
+  .menu-toggle svg{width:30px;height:30px}
+  .mobile-menu{display:none;flex-direction:column;background:var(--onyx-2);border-top:1px solid var(--line)}
+  .mobile-menu.open{display:flex}
+  .mobile-menu a{padding:16px 22px;font-family:'Oswald',sans-serif;text-transform:uppercase;letter-spacing:1px;border-bottom:1px solid var(--line)}
+  .mobile-menu a:hover{background:var(--onyx-3);color:var(--gold)}
+
+  /* Hero */
+  .hero{
+    min-height:100vh;display:flex;align-items:center;position:relative;
+    background:linear-gradient(180deg,rgba(14,14,16,.78),rgba(14,14,16,.92)),
+      url('https://images.unsplash.com/photo-1503951914875-452162b0f3f1?auto=format&fit=crop&w=1600&q=80') center/cover fixed;
+  }
+  .hero-inner{max-width:720px;padding:120px 0 80px}
+  .eyebrow{display:inline-flex;align-items:center;gap:.6rem;color:var(--gold);font-family:'Oswald',sans-serif;text-transform:uppercase;letter-spacing:3px;font-size:.85rem;margin-bottom:1.2rem}
+  .eyebrow span{width:42px;height:1px;background:var(--gold)}
+  .hero h1{font-size:clamp(2.6rem,8vw,5rem);line-height:1.02;text-transform:uppercase;margin-bottom:1.4rem}
+  .hero p{color:var(--muted);font-size:1.1rem;max-width:520px;margin-bottom:2.2rem}
+  .hero-actions{display:flex;flex-wrap:wrap;gap:1rem;align-items:center}
+  .ghost{font-family:'Oswald',sans-serif;text-transform:uppercase;letter-spacing:2px;font-size:.9rem;color:var(--cream);display:inline-flex;align-items:center;gap:.5rem}
+  .ghost:hover{color:var(--gold)}
+
+  /* Sections */
+  section{padding:90px 0}
+  .section-head{text-align:center;max-width:640px;margin:0 auto 56px}
+  .section-head .eyebrow{justify-content:center}
+  .section-head h2{font-size:clamp(2rem,5vw,3rem);text-transform:uppercase;line-height:1.05}
+  .section-head p{color:var(--muted);margin-top:.8rem}
+
+  /* Services menu */
+  .services{background:var(--onyx-2)}
+  .menu-list{max-width:760px;margin:0 auto;display:flex;flex-direction:column;gap:1.6rem}
+  .menu-item{display:flex;align-items:flex-end;gap:.6rem}
+  .menu-item .icon{flex:0 0 auto;color:var(--gold);margin-bottom:6px}
+  .menu-item .icon svg{width:26px;height:26px}
+  .menu-item .info{flex:0 0 auto}
+  .menu-item .info h3{font-size:1.25rem;text-transform:uppercase;font-weight:600}
+  .menu-item .info small{color:var(--muted);font-size:.85rem;letter-spacing:.3px}
+  .menu-item .dots{flex:1 1 auto;border-bottom:2px dotted var(--line);margin:0 4px 8px;min-width:30px}
+  .menu-item .price{flex:0 0 auto;font-family:'Oswald',sans-serif;font-size:1.45rem;font-weight:700;color:var(--gold)}
+
+  /* Team */
+  .team-grid{display:grid;grid-template-columns:1fr;gap:28px}
+  .barber{
+    background:var(--onyx-2);border:1px solid var(--line);border-radius:4px;overflow:hidden;
+    transition:transform .3s,border-color .3s;
+  }
+  .barber:hover{transform:translateY(-8px);border-color:var(--gold)}
+  .barber .photo{aspect-ratio:4/4;overflow:hidden}
+  .barber .photo img{width:100%;height:100%;object-fit:cover;filter:grayscale(.35) contrast(1.05);transition:filter .4s,transform .6s}
+  .barber:hover .photo img{filter:grayscale(0);transform:scale(1.05)}
+  .barber .body{padding:24px}
+  .barber .body h3{font-size:1.4rem;text-transform:uppercase}
+  .barber .role{color:var(--gold);font-family:'Oswald',sans-serif;letter-spacing:1px;text-transform:uppercase;font-size:.85rem;margin:.2rem 0 .8rem}
+  .barber .body p{color:var(--muted);font-size:.95rem}
+  .barber .socials{display:flex;gap:.8rem;margin-top:1rem}
+  .barber .socials span{width:36px;height:36px;display:flex;align-items:center;justify-content:center;border:1px solid var(--line);border-radius:50%;color:var(--muted);transition:.25s}
+  .barber .socials span:hover{border-color:var(--gold);color:var(--gold)}
+  .barber .socials svg{width:16px;height:16px}
+
+  /* Gallery */
+  .gallery{background:var(--onyx-2)}
+  .gallery-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
+  .gallery-grid figure{overflow:hidden;border-radius:4px;aspect-ratio:1/1}
+  .gallery-grid img{width:100%;height:100%;object-fit:cover;filter:grayscale(.4);transition:.5s}
+  .gallery-grid figure:hover img{filter:grayscale(0);transform:scale(1.08)}
+
+  /* Reservas / CTA */
+  .reserve{
+    background:linear-gradient(180deg,rgba(14,14,16,.85),rgba(14,14,16,.95)),
+      url('https://images.unsplash.com/photo-1599351431202-1e0f0137899a?auto=format&fit=crop&w=1600&q=80') center/cover;
+    text-align:center;
+  }
+  .reserve h2{font-size:clamp(2rem,5vw,3.2rem);text-transform:uppercase;margin-bottom:1rem}
+  .reserve p{color:var(--muted);max-width:520px;margin:0 auto 2rem}
+
+  /* Footer */
+  footer{background:#0a0a0b;border-top:1px solid var(--line);padding:70px 0 30px}
+  .foot-grid{display:grid;grid-template-columns:1fr;gap:40px}
+  .foot-col h4{font-family:'Oswald',sans-serif;text-transform:uppercase;letter-spacing:2px;color:var(--gold);font-size:1rem;margin-bottom:1.2rem}
+  .hours-row{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px dashed var(--line);font-size:.95rem}
+  .hours-row span:last-child{color:var(--cream)}
+  .hours-row.closed span:last-child{color:var(--copper)}
+  .foot-col p{color:var(--muted);font-size:.95rem;margin-bottom:.6rem;display:flex;gap:.6rem;align-items:flex-start}
+  .foot-col p svg{width:18px;height:18px;color:var(--gold);flex:0 0 auto;margin-top:3px}
+  .foot-bottom{text-align:center;margin-top:50px;padding-top:24px;border-top:1px solid var(--line);color:var(--muted);font-size:.85rem}
+  .foot-bottom .brand{justify-content:center;font-size:1.1rem;margin-bottom:.6rem}
+
+  /* Scroll reveal */
+  .reveal{opacity:0;transform:translateY(40px);transition:opacity .7s ease,transform .7s ease}
+  .reveal.show{opacity:1;transform:none}
+
+  /* Responsive */
+  @media(min-width:768px){
+    .nav-links{display:flex}
+    .menu-toggle{display:none}
+    .team-grid{grid-template-columns:repeat(3,1fr)}
+    .gallery-grid{grid-template-columns:repeat(4,1fr)}
+    .foot-grid{grid-template-columns:1.2fr 1fr 1fr}
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header id="header">
+  <div class="container nav">
+    <a href="#" class="brand">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><line x1="20" y1="4" x2="8.12" y2="15.88"/><line x1="14.47" y1="14.48" x2="20" y2="20"/><line x1="8.12" y1="8.12" x2="12" y2="12"/></svg>
+      Corte<b>&amp;</b>Filo
+    </a>
+    <ul class="nav-links">
+      <li><a href="#servicios">Servicios</a></li>
+      <li><a href="#equipo">Nuestro Equipo</a></li>
+      <li><a href="#galeria">Galería</a></li>
+      <li><a href="#reservas">Reservas</a></li>
+    </ul>
+    <button class="menu-toggle" id="menuToggle" aria-label="Abrir menú">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+    </button>
+  </div>
+  <nav class="mobile-menu" id="mobileMenu">
+    <a href="#servicios">Servicios</a>
+    <a href="#equipo">Nuestro Equipo</a>
+    <a href="#galeria">Galería</a>
+    <a href="#reservas">Reservas</a>
+  </nav>
+</header>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="container hero-inner reveal">
+    <div class="eyebrow"><span></span>Desde 1992 · Tradición urbana</div>
+    <h1>El arte de la<br>barbería <span class="gold">clásica</span></h1>
+    <p>Cortes a navaja, afeitado tradicional con toalla caliente y un ambiente donde cada detalle está pensado para ti. Esto no es una peluquería: es un ritual.</p>
+    <div class="hero-actions">
+      <a href="#reservas" class="btn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+        Reservar Turno
+      </a>
+      <a href="#servicios" class="ghost">Ver servicios &rarr;</a>
+    </div>
+  </div>
+</section>
+
+<!-- SERVICIOS -->
+<section class="services" id="servicios">
+  <div class="container">
+    <div class="section-head reveal">
+      <div class="eyebrow"><span></span>Carta de servicios<span></span></div>
+      <h2>Precios &amp; Servicios</h2>
+      <p>Trabajo de precisión con productos premium. Sin prisas, sin atajos.</p>
+    </div>
+    <div class="menu-list">
+      <div class="menu-item reveal">
+        <span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><line x1="20" y1="4" x2="8.12" y2="15.88"/><line x1="14.47" y1="14.48" x2="20" y2="20"/><line x1="8.12" y1="8.12" x2="12" y2="12"/></svg></span>
+        <div class="info"><h3>Corte Clásico</h3><small>Lavado, corte a tijera o máquina y peinado</small></div>
+        <div class="dots"></div><div class="price">$18</div>
+      </div>
+      <div class="menu-item reveal">
+        <span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 14c0-4 3.5-7 8-7s8 3 8 7"/><path d="M4 14c0 3 2 5 5 5"/><path d="M20 14c0 3-2 5-5 5"/><path d="M9 19h6"/></svg></span>
+        <div class="info"><h3>Arreglo de Barba con Toalla Caliente</h3><small>Perfilado a navaja, aceites y bálsamo</small></div>
+        <div class="dots"></div><div class="price">$15</div>
+      </div>
+      <div class="menu-item reveal">
+        <span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6l9 6 9-6"/><path d="M3 6v8l9 6 9-6V6"/></svg></span>
+        <div class="info"><h3>Corte + Barba (Combo)</h3><small>La experiencia completa Corte &amp; Filo</small></div>
+        <div class="dots"></div><div class="price">$28</div>
+      </div>
+      <div class="menu-item reveal">
+        <span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l1.5 5h5l-4 3.5 1.5 5L12 17l-4 3 1.5-5-4-3.5h5z"/></svg></span>
+        <div class="info"><h3>Afeitado Tradicional a Navaja</h3><small>Espuma caliente y piedra de alumbre</small></div>
+        <div class="dots"></div><div class="price">$20</div>
+      </div>
+      <div class="menu-item reveal">
+        <span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M5 20c0-3.5 3-6 7-6s7 2.5 7 6"/></svg></span>
+        <div class="info"><h3>Corte Infantil</h3><small>Menores de 12 años</small></div>
+        <div class="dots"></div><div class="price">$12</div>
+      </div>
+      <div class="menu-item reveal">
+        <span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h16"/><path d="M7 8l-3 4 3 4"/><path d="M17 8l3 4-3 4"/></svg></span>
+        <div class="info"><h3>Diseño de Líneas &amp; Degradado</h3><small>Freestyle y detalles a navaja</small></div>
+        <div class="dots"></div><div class="price">$22</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- EQUIPO -->
+<section id="equipo">
+  <div class="container">
+    <div class="section-head reveal">
+      <div class="eyebrow"><span></span>Maestros de la navaja<span></span></div>
+      <h2>Nuestro Equipo</h2>
+      <p>Tres estilos, una misma obsesión por el detalle.</p>
+    </div>
+    <div class="team-grid">
+      <article class="barber reveal">
+        <div class="photo"><img src="https://images.unsplash.com/photo-1605497788044-5a32c7078486?auto=format&fit=crop&w=600&q=80" alt="Barbero Marco Ávila"></div>
+        <div class="body">
+          <h3>Marco Ávila</h3>
+          <div class="role">Especialista en degradados</div>
+          <p>Maestro del fade y las líneas imposibles. 14 años dándole forma a la ciudad.</p>
+          <div class="socials">
+            <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor"/></svg></span>
+            <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M22 4s-1 3-3 4c.5 9-8 14-15 9 2 0 4-1 5-2-3 0-5-2-5-5 1 .5 2 .5 3 0-3-1-4-4-3-6 2 2 5 3 8 3-1-4 4-6 6-3 1 0 2-1 3-1z"/></svg></span>
+          </div>
+        </div>
+      </article>
+      <article class="barber reveal">
+        <div class="photo"><img src="https://images.unsplash.com/photo-1622286342621-4bd786c2447c?auto=format&fit=crop&w=600&q=80" alt="Barbero Diego Salas"></div>
+        <div class="body">
+          <h3>Diego Salas</h3>
+          <div class="role">Afeitado clásico a navaja</div>
+          <p>El ritual de la toalla caliente es su firma. Precisión quirúrgica y mano firme.</p>
+          <div class="socials">
+            <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor"/></svg></span>
+            <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M22 4s-1 3-3 4c.5 9-8 14-15 9 2 0 4-1 5-2-3 0-5-2-5-5 1 .5 2 .5 3 0-3-1-4-4-3-6 2 2 5 3 8 3-1-4 4-6 6-3 1 0 2-1 3-1z"/></svg></span>
+          </div>
+        </div>
+      </article>
+      <article class="barber reveal">
+        <div class="photo"><img src="https://images.unsplash.com/photo-1583864697784-a0efc8379f70?auto=format&fit=crop&w=600&q=80" alt="Barbero Iván Mora"></div>
+        <div class="body">
+          <h3>Iván Mora</h3>
+          <div class="role">Estilismo &amp; barba de diseño</div>
+          <p>Combina lo vintage con tendencias urbanas. Tu barba nunca se vio tan bien.</p>
+          <div class="socials">
+            <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor"/></svg></span>
+            <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M22 4s-1 3-3 4c.5 9-8 14-15 9 2 0 4-1 5-2-3 0-5-2-5-5 1 .5 2 .5 3 0-3-1-4-4-3-6 2 2 5 3 8 3-1-4 4-6 6-3 1 0 2-1 3-1z"/></svg></span>
+          </div>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- GALERIA -->
+<section class="gallery" id="galeria">
+  <div class="container">
+    <div class="section-head reveal">
+      <div class="eyebrow"><span></span>Nuestro trabajo<span></span></div>
+      <h2>Galería</h2>
+      <p>Resultados reales de la silla de Corte &amp; Filo.</p>
+    </div>
+    <div class="gallery-grid">
+      <figure class="reveal"><img src="https://images.unsplash.com/photo-1599351431202-1e0f0137899a?auto=format&fit=crop&w=500&q=80" alt="Corte 1"></figure>
+      <figure class="reveal"><img src="https://images.unsplash.com/photo-1503951914875-452162b0f3f1?auto=format&fit=crop&w=500&q=80" alt="Corte 2"></figure>
+      <figure class="reveal"><img src="https://images.unsplash.com/photo-1521590832167-7bcbfaa6381f?auto=format&fit=crop&w=500&q=80" alt="Corte 3"></figure>
+      <figure class="reveal"><img src="https://images.unsplash.com/photo-1517832606299-7ae9b720a186?auto=format&fit=crop&w=500&q=80" alt="Corte 4"></figure>
+      <figure class="reveal"><img src="https://images.unsplash.com/photo-1593702275687-f8b402bf1fb5?auto=format&fit=crop&w=500&q=80" alt="Corte 7"></figure>
+      <figure class="reveal"><img src="https://images.unsplash.com/photo-1622296089863-eb7fc530daa8?auto=format&fit=crop&w=500&q=80" alt="Corte 8"></figure>
+    </div>
+  </div>
+</section>
+
+<!-- RESERVAS / CTA -->
+<section class="reserve" id="reservas">
+  <div class="container reveal">
+    <div class="eyebrow" style="justify-content:center"><span></span>Asegura tu silla<span></span></div>
+    <h2>Reserva tu turno</h2>
+    <p>Las mejores horas se agotan rápido. Aparta tu cita y deja el resto en nuestras manos.</p>
+    <a href="#" class="btn">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+      Reservar Ahora
+    </a>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="container">
+    <div class="foot-grid">
+      <div class="foot-col">
+        <h4>Horarios de Atención</h4>
+        <div class="hours-row"><span>Lunes — Viernes</span><span>09:00 — 20:00</span></div>
+        <div class="hours-row"><span>Sábado</span><span>09:00 — 21:00</span></div>
+        <div class="hours-row closed"><span>Domingo</span><span>Cerrado</span></div>
+        <div class="hours-row"><span>Feriados</span><span>10:00 — 15:00</span></div>
+      </div>
+      <div class="foot-col">
+        <h4>Dónde Estamos</h4>
+        <p><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>Av. del Roble 1245, Barrio Centro</p>
+        <p><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"/></svg>+1 (555) 248-1992</p>
+      </div>
+      <div class="foot-col">
+        <h4>Reserva Directa</h4>
+        <p style="color:var(--muted)">Escríbenos y confirma tu turno en minutos. Atención personalizada.</p>
+        <a href="#reservas" class="btn" style="margin-top:1rem">Contactar</a>
+      </div>
+    </div>
+    <div class="foot-bottom">
+      <div class="brand">Corte<b>&amp;</b>Filo</div>
+      &copy; 2026 Corte &amp; Filo Barbershop. Todos los derechos reservados.
+    </div>
+  </div>
+</footer>
+
+<script>
+  // Header scroll state
+  const header = document.getElementById('header');
+  window.addEventListener('scroll', () => {
+    header.classList.toggle('scrolled', window.scrollY > 30);
+  });
+
+  // Mobile menu
+  const toggle = document.getElementById('menuToggle');
+  const mobileMenu = document.getElementById('mobileMenu');
+  toggle.addEventListener('click', () => mobileMenu.classList.toggle('open'));
+  mobileMenu.querySelectorAll('a').forEach(a =>
+    a.addEventListener('click', () => mobileMenu.classList.remove('open'))
+  );
+
+  // Scroll reveal (fade-up)
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((e, i) => {
+      if (e.isIntersecting) {
+        e.target.style.transitionDelay = (e.target.dataset.delay || (i % 4) * 80) + 'ms';
+        e.target.classList.add('show');
+        observer.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.15 });
+  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+</script>
+
+<!-- Conmutador de idioma ES / EN (traducción persistente entre páginas) -->
+<script src="i18n.js"></script>
+</body>
+</html>

@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#14304A">
+<title>Bistró del Mar — Menú Digital</title>
+
+<!-- Tipografías sofisticadas -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+<style>
+  /* ============================================================
+     TOKENS DE DISEÑO — Bistró del Mar
+     Paleta costera: arena, blanco limpio, marino profundo, dorado oscuro
+     ============================================================ */
+  :root{
+    --arena:        #ECE2D0;
+    --arena-soft:   #F7F2E8;
+    --blanco:       #FFFFFF;
+    --marino:       #14304A;
+    --marino-900:   #0D2034;
+    --marino-700:   #1E456A;
+    --dorado:       #9C7A24;
+    --dorado-soft:  #C2A14C;
+    --texto:        #2A2823;
+    --texto-muted:  #6E665A;
+    --linea:        rgba(20,48,74,.12);
+
+    --sombra-card:  0 4px 18px rgba(20,48,74,.07);
+    --sombra-hover: 0 18px 40px rgba(20,48,74,.18);
+
+    --r-lg: 18px;
+    --r-md: 12px;
+    --r-sm: 8px;
+
+    --maxw: 1140px;
+    --ease: cubic-bezier(.22,.61,.36,1);
+  }
+
+  *,*::before,*::after{ box-sizing:border-box; margin:0; padding:0; }
+
+  html{ scroll-behavior:smooth; }
+
+  body{
+    font-family:'Montserrat',system-ui,sans-serif;
+    color:var(--texto);
+    background:var(--arena);
+    line-height:1.55;
+    -webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
+  }
+
+  /* textura sutil de fondo, sin imágenes externas */
+  body::before{
+    content:"";
+    position:fixed; inset:0; z-index:-1;
+    background:
+      radial-gradient(1200px 600px at 85% -10%, rgba(30,69,106,.10), transparent 60%),
+      radial-gradient(900px 500px at -10% 110%, rgba(156,122,36,.10), transparent 60%);
+  }
+
+  img{ display:block; width:100%; height:auto; }
+
+  :focus-visible{
+    outline:2.5px solid var(--dorado-soft);
+    outline-offset:3px;
+    border-radius:6px;
+  }
+
+  /* ============================================================
+     HEADER
+     ============================================================ */
+  .header{
+    position:relative;
+    background:linear-gradient(160deg,var(--marino) 0%,var(--marino-900) 100%);
+    color:var(--arena-soft);
+    text-align:center;
+    padding:42px 20px 70px;
+    overflow:hidden;
+  }
+  .header::after{ /* línea costera / ola inferior */
+    content:"";
+    position:absolute; left:0; right:0; bottom:-1px; height:46px;
+    background:var(--arena);
+    -webkit-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 46' preserveAspectRatio='none'%3E%3Cpath d='M0 46V20c100-22 220-22 320 0s220 22 320 0 220-22 320 0 200 20 240 18v8z'/%3E%3C/svg%3E") no-repeat center/cover;
+            mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 46' preserveAspectRatio='none'%3E%3Cpath d='M0 46V20c100-22 220-22 320 0s220 22 320 0 220-22 320 0 200 20 240 18v8z'/%3E%3C/svg%3E") no-repeat center/cover;
+  }
+
+  .header__mark{
+    display:inline-flex; align-items:center; justify-content:center;
+    width:64px; height:64px; margin-bottom:14px;
+    border:1.5px solid var(--dorado-soft);
+    border-radius:50%;
+    color:var(--dorado-soft);
+  }
+  .header__mark svg{ width:34px; height:34px; }
+
+  .header__title{
+    font-family:'Playfair Display',serif;
+    font-weight:600;
+    font-size:clamp(2rem,7vw,3.1rem);
+    letter-spacing:.5px;
+    line-height:1.05;
+  }
+  .header__title span{ color:var(--dorado-soft); font-style:italic; }
+
+  .header__sub{
+    display:inline-flex; align-items:center; gap:9px;
+    margin-top:12px;
+    font-size:.72rem; font-weight:500;
+    letter-spacing:.32em; text-transform:uppercase;
+    color:rgba(247,242,232,.72);
+  }
+  .header__sub::before,.header__sub::after{
+    content:""; width:26px; height:1px; background:var(--dorado-soft); opacity:.6;
+  }
+
+  .wifi{
+    display:inline-flex; align-items:center; gap:14px;
+    margin-top:22px; padding:11px 18px;
+    background:rgba(255,255,255,.06);
+    border:1px solid rgba(194,161,76,.35);
+    border-radius:999px;
+    text-align:left;
+  }
+  .wifi svg{ width:22px; height:22px; color:var(--dorado-soft); flex-shrink:0; }
+  .wifi__label{
+    font-size:.6rem; letter-spacing:.22em; text-transform:uppercase;
+    color:rgba(247,242,232,.6);
+  }
+  .wifi__data{ font-size:.86rem; font-weight:500; letter-spacing:.02em; }
+  .wifi__data b{ color:var(--dorado-soft); font-weight:600; }
+  .wifi__sep{ width:1px; height:26px; background:rgba(247,242,232,.18); }
+
+  /* ============================================================
+     NAV CATEGORÍAS — STICKY
+     ============================================================ */
+  .nav{
+    position:sticky; top:0; z-index:50;
+    background:rgba(247,242,232,.86);
+    backdrop-filter:blur(12px);
+    -webkit-backdrop-filter:blur(12px);
+    border-bottom:1px solid var(--linea);
+    transition:box-shadow .3s var(--ease);
+  }
+  .nav.is-stuck{ box-shadow:0 8px 24px rgba(20,48,74,.10); }
+
+  .nav__track{
+    display:flex; gap:6px;
+    max-width:var(--maxw); margin:0 auto;
+    padding:12px 14px;
+    overflow-x:auto;
+    scrollbar-width:none;
+    -webkit-overflow-scrolling:touch;
+  }
+  .nav__track::-webkit-scrollbar{ display:none; }
+
+  .tab{
+    flex:0 0 auto;
+    font-family:'Montserrat',sans-serif;
+    font-size:.82rem; font-weight:500; letter-spacing:.04em;
+    color:var(--marino);
+    background:transparent;
+    border:1px solid transparent;
+    border-radius:999px;
+    padding:9px 18px;
+    cursor:pointer;
+    white-space:nowrap;
+    transition:color .25s var(--ease), background .25s var(--ease), border-color .25s var(--ease);
+  }
+  .tab:hover{ background:rgba(20,48,74,.06); }
+  .tab.is-active{
+    color:var(--arena-soft);
+    background:var(--marino);
+    border-color:var(--marino);
+  }
+
+  /* ============================================================
+     SECCIÓN MENÚ + GRID
+     ============================================================ */
+  .menu{
+    max-width:var(--maxw);
+    margin:0 auto;
+    padding:34px 18px 120px;
+  }
+  .menu__intro{ text-align:center; margin-bottom:30px; }
+  .menu__eyebrow{
+    font-size:.68rem; letter-spacing:.3em; text-transform:uppercase;
+    color:var(--dorado);
+    font-weight:600;
+  }
+  .menu__heading{
+    font-family:'Playfair Display',serif;
+    font-size:clamp(1.5rem,5vw,2.1rem);
+    font-weight:600; color:var(--marino);
+    margin-top:6px;
+  }
+
+  .grid{
+    display:grid;
+    grid-template-columns:1fr;
+    gap:20px;
+  }
+
+  /* ---------- TARJETA DE PLATILLO ---------- */
+  .card{
+    position:relative;
+    background:var(--blanco);
+    border:1px solid var(--linea);
+    border-radius:var(--r-lg);
+    overflow:hidden;
+    box-shadow:var(--sombra-card);
+    display:flex; flex-direction:column;
+    transition:transform .4s var(--ease), box-shadow .4s var(--ease);
+    /* estado inicial para animación de entrada */
+    opacity:0;
+    transform:translateY(22px);
+  }
+  .card.is-in{ opacity:1; transform:translateY(0); }
+  .card:hover{
+    transform:translateY(-6px);
+    box-shadow:var(--sombra-hover);
+  }
+
+  .card__media{
+    position:relative;
+    aspect-ratio:16/10;
+    overflow:hidden;
+    background:linear-gradient(135deg,#d9d0bd,#c4baa4);
+  }
+  .card__media img{
+    width:100%; height:100%; object-fit:cover;
+    transition:transform .7s var(--ease);
+  }
+  .card:hover .card__media img{ transform:scale(1.08); }
+
+  .card__tag{
+    position:absolute; top:12px; left:12px;
+    font-size:.6rem; font-weight:600;
+    letter-spacing:.16em; text-transform:uppercase;
+    color:var(--arena-soft);
+    background:rgba(13,32,52,.78);
+    backdrop-filter:blur(4px);
+    padding:6px 11px;
+    border-radius:999px;
+  }
+
+  .card__body{
+    padding:18px 18px 20px;
+    display:flex; flex-direction:column; flex:1;
+  }
+  .card__name{
+    font-family:'Playfair Display',serif;
+    font-size:1.22rem; font-weight:600;
+    color:var(--marino);
+    line-height:1.2;
+  }
+  .card__desc{
+    margin-top:8px;
+    font-size:.86rem; font-weight:300;
+    color:var(--texto-muted);
+    flex:1;
+  }
+  .card__foot{
+    display:flex; align-items:flex-end; justify-content:space-between;
+    gap:12px;
+    margin-top:16px;
+    padding-top:14px;
+    border-top:1px dashed var(--linea);
+  }
+  .card__meta{
+    font-size:.66rem; letter-spacing:.14em; text-transform:uppercase;
+    color:var(--texto-muted);
+  }
+  .card__price{
+    font-family:'Playfair Display',serif;
+    font-size:1.5rem; font-weight:700;
+    color:var(--dorado);
+    letter-spacing:.01em;
+    line-height:1;
+    white-space:nowrap;
+  }
+  .card__price small{ font-size:.78rem; font-weight:600; margin-right:1px; opacity:.85; }
+
+  /* estado vacío (por si un filtro no tuviese platillos) */
+  .empty{
+    grid-column:1/-1;
+    text-align:center; padding:60px 20px;
+    color:var(--texto-muted);
+    font-style:italic;
+  }
+
+  /* ============================================================
+     BOTÓN FLOTANTE — PEDIR POR WHATSAPP
+     ============================================================ */
+  .fab{
+    position:fixed; right:18px; bottom:18px; z-index:60;
+    display:inline-flex; align-items:center; gap:10px;
+    padding:14px 20px 14px 16px;
+    background:var(--marino);
+    color:var(--arena-soft);
+    font-family:'Montserrat',sans-serif;
+    font-size:.86rem; font-weight:600; letter-spacing:.02em;
+    text-decoration:none;
+    border-radius:999px;
+    box-shadow:0 12px 30px rgba(13,32,52,.35);
+    border:1px solid rgba(194,161,76,.5);
+    transition:transform .3s var(--ease), background .3s var(--ease);
+  }
+  .fab:hover{ transform:translateY(-3px) scale(1.02); background:var(--marino-700); }
+  .fab svg{ width:24px; height:24px; color:var(--dorado-soft); }
+  .fab__text{ line-height:1; }
+
+  /* ============================================================
+     FOOTER
+     ============================================================ */
+  .footer{
+    text-align:center;
+    padding:26px 20px 34px;
+    color:var(--texto-muted);
+    font-size:.74rem; letter-spacing:.04em;
+  }
+  .footer b{ font-family:'Playfair Display',serif; color:var(--marino); font-weight:600; }
+
+  /* ============================================================
+     RESPONSIVE — Mobile-first → tablet → desktop
+     ============================================================ */
+  @media (min-width:640px){
+    .grid{ grid-template-columns:repeat(2,1fr); gap:24px; }
+    .header{ padding:54px 20px 80px; }
+  }
+  @media (min-width:980px){
+    .grid{ grid-template-columns:repeat(3,1fr); gap:26px; }
+    .nav__track{ justify-content:center; }
+    .fab{ padding:15px 24px 15px 18px; font-size:.9rem; }
+  }
+
+  /* Accesibilidad: respetar reducción de movimiento */
+  @media (prefers-reduced-motion:reduce){
+    *{ animation:none !important; transition:none !important; }
+    .card{ opacity:1; transform:none; }
+    html{ scroll-behavior:auto; }
+  }
+</style>
+</head>
+<body>
+
+  <!-- ===================== HEADER ===================== -->
+  <header class="header">
+    <div class="header__mark" aria-hidden="true">
+      <!-- ícono ola/concha en SVG -->
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M2 17c2.5 0 2.5-2 5-2s2.5 2 5 2 2.5-2 5-2 2.5 2 5 2"/>
+        <path d="M2 12c2.5 0 2.5-2 5-2s2.5 2 5 2 2.5-2 5-2 2.5 2 5 2"/>
+        <path d="M2 7c2.5 0 2.5-2 5-2s2.5 2 5 2 2.5-2 5-2 2.5 2 5 2"/>
+      </svg>
+    </div>
+
+    <h1 class="header__title">Bistró <span>del Mar</span></h1>
+    <p class="header__sub">Menú Digital</p>
+
+    <!-- <div class="wifi">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="M5 12.5a10 10 0 0 1 14 0"/>
+        <path d="M8.5 16a5 5 0 0 1 7 0"/>
+        <path d="M2 9a15 15 0 0 1 20 0"/>
+        <circle cx="12" cy="19.5" r="1" fill="currentColor" stroke="none"/>
+      </svg>
+      <div>
+        <div class="wifi__label">Red WiFi del local</div>
+        <div class="wifi__data">BistroMar_Invitados</div>
+      </div>
+      <span class="wifi__sep" aria-hidden="true"></span>
+      <div>
+        <div class="wifi__label">Contraseña</div>
+        <div class="wifi__data"><b>marymar2024</b></div>
+      </div>
+    </div> -->
+  </header>
+
+  <!-- ===================== NAV CATEGORÍAS (STICKY) ===================== -->
+  <nav class="nav" id="nav" aria-label="Categorías del menú">
+    <div class="nav__track" id="tabs" role="tablist">
+      <button class="tab is-active" role="tab" aria-selected="true" data-filter="todos">Todos</button>
+      <button class="tab" role="tab" aria-selected="false" data-filter="entradas">Entradas</button>
+      <button class="tab" role="tab" aria-selected="false" data-filter="fuertes">Platos Fuertes</button>
+      <button class="tab" role="tab" aria-selected="false" data-filter="mar">Del Mar</button>
+      <button class="tab" role="tab" aria-selected="false" data-filter="bebidas">Bebidas</button>
+    </div>
+  </nav>
+
+  <!-- ===================== MENÚ ===================== -->
+  <main class="menu">
+    <div class="menu__intro">
+      <p class="menu__eyebrow">Cocina costera</p>
+      <h2 class="menu__heading" id="menu-heading">Nuestra carta</h2>
+    </div>
+
+    <section class="grid" id="grid" aria-labelledby="menu-heading"></section>
+  </main>
+
+  <!-- ===================== BOTÓN FLOTANTE ===================== -->
+  <a class="fab" href="https://wa.me/15555550123?text=Hola%2C%20quisiera%20hacer%20un%20pedido%20en%20Bistr%C3%B3%20del%20Mar"
+     target="_blank" rel="noopener" aria-label="Pedir por WhatsApp">
+    <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+      <path d="M12 2a10 10 0 0 0-8.6 15l-1.3 4.7 4.8-1.3A10 10 0 1 0 12 2zm0 1.8a8.2 8.2 0 0 1 6.9 12.6.9.9 0 0 0-.1.7l.7 2.5-2.6-.7a.9.9 0 0 0-.6.1A8.2 8.2 0 1 1 12 3.8zm-3.1 4c-.2 0-.5 0-.7.4-.3.3-.9.9-.9 2.1s.9 2.5 1 2.6c.1.2 1.8 2.9 4.5 4 .6.2 1.1.4 1.5.5.6.2 1.2.2 1.6.1.5-.1 1.5-.6 1.7-1.2.2-.6.2-1.1.1-1.2 0-.1-.2-.2-.5-.3l-1.7-.8c-.2-.1-.4-.1-.6.1l-.6.8c-.1.2-.3.2-.5.1-.3-.1-1.1-.4-2-1.2-.8-.7-1.3-1.5-1.4-1.7-.2-.3 0-.4.1-.5l.4-.5c.1-.2.1-.3.2-.5 0-.2 0-.3 0-.4l-.8-1.9c-.2-.5-.4-.4-.6-.4z"/>
+    </svg>
+    <span class="fab__text">Pedir por WhatsApp</span>
+  </a>
+
+  <footer class="footer">
+    <b>Bistró del Mar</b> · Pescados y mariscos frescos cada día<br>
+    Av. del Malecón 214, Costa Azul · Diseño digital de carta
+  </footer>
+
+<script>
+/* ============================================================
+   DATOS DEL MENÚ
+   ============================================================ */
+const PLATILLOS = [
+  {
+    cat:'entradas', catName:'Entrada',
+    name:'Ceviche del Puerto',
+    desc:'Pesca blanca curada en limón con cebolla morada, cilantro fresco y un toque de ají amarillo.',
+    price:'9.50',
+    img:'https://images.unsplash.com/photo-1535399831218-d5bd36d1a6b3?w=600&q=80&auto=format&fit=crop'
+  },
+  {
+    cat:'entradas', catName:'Entrada',
+    name:'Carpaccio de Pulpo',
+    desc:'Finas láminas de pulpo a la brasa con aceite de oliva, alcaparras y ralladura de limón.',
+    price:'11.00',
+    img:'https://images.unsplash.com/photo-1559742811-822873691df8?w=600&q=80&auto=format&fit=crop'
+  },
+  {
+    cat:'entradas', catName:'Entrada',
+    name:'Vuelve a la Vida',
+    desc:'Coctel de mariscos surtidos en salsa de tomate de la casa, aguacate y galletas saladas.',
+    price:'10.50',
+    img:'https://images.unsplash.com/photo-1606756790138-261d2b21cd75?w=600&q=80&auto=format&fit=crop'
+  },
+  {
+    cat:'fuertes', catName:'Plato Fuerte',
+    name:'Paella Marinera',
+    desc:'Arroz bomba al azafrán con camarón, mejillón, calamar y pimientos asados. Para compartir.',
+    price:'22.00',
+    img:'https://images.unsplash.com/photo-1534080564583-6be75777b70a?w=600&q=80&auto=format&fit=crop'
+  },
+  {
+    cat:'fuertes', catName:'Plato Fuerte',
+    name:'Arroz Negro de Calamar',
+    desc:'Arroz cremoso teñido en tinta de calamar, alioli de ajo dulce y crujiente de cebollín.',
+    price:'19.50',
+    img:'https://images.unsplash.com/photo-1473093226795-af9932fe5856?w=600&q=80&auto=format&fit=crop'
+  },
+  {
+    cat:'mar', catName:'Del Mar',
+    name:'Pulpo a la Brasa',
+    desc:'Tentáculo a la parrilla sobre puré de papa ahumada, pimentón de la Vera y aceite de hierbas.',
+    price:'24.00',
+    img:'https://images.unsplash.com/photo-1625943553852-781c6dd46faa?w=600&q=80&auto=format&fit=crop'
+  },
+  {
+    cat:'mar', catName:'Del Mar',
+    name:'Salmón a la Parrilla',
+    desc:'Lomo de salmón sellado con mantequilla de eneldo, espárragos verdes y limón asado.',
+    price:'20.00',
+    img:'https://images.unsplash.com/photo-1467003909585-2f8a72700288?w=600&q=80&auto=format&fit=crop'
+  },
+  {
+    cat:'mar', catName:'Del Mar',
+    name:'Camarones al Ajillo',
+    desc:'Camarones jumbo salteados en aceite de oliva, ajo dorado y guindilla, con pan de la casa.',
+    price:'17.50',
+    img:'https://images.unsplash.com/photo-1565680018434-b513d5e5fd47?w=600&q=80&auto=format&fit=crop'
+  },
+  {
+    cat:'bebidas', catName:'Bebida',
+    name:'Limonada de Coco',
+    desc:'Refrescante mezcla de limón natural, crema de coco y hierbabuena, servida bien fría.',
+    price:'5.00',
+    img:'https://i0.wp.com/www.pasionthermomix.co/wp-content/uploads/2022/05/captura-de-pantalla-2020-12-14-a-las-22-13-27_1.jpg?resize=1024%2C720&ssl=1'
+  },
+  {
+    cat:'bebidas', catName:'Bebida',
+    name:'Sangría de Vino Blanco',
+    desc:'Vino blanco frutal con duraznos, cítricos y un toque de cava. Por copa o jarra.',
+    price:'7.50',
+    img:'https://images.unsplash.com/photo-1560512823-829485b8bf24?w=600&q=80&auto=format&fit=crop'
+  }
+];
+
+/* Imagen de respaldo si alguna URL no carga (la carta nunca queda rota) */
+const FALLBACK = 'https://picsum.photos/seed/bistromar/600/400';
+
+/* ============================================================
+   RENDERIZADO DE TARJETAS
+   ============================================================ */
+const grid = document.getElementById('grid');
+
+function render(filtro){
+  const lista = filtro === 'todos'
+    ? PLATILLOS
+    : PLATILLOS.filter(p => p.cat === filtro);
+
+  grid.innerHTML = '';
+
+  if(lista.length === 0){
+    grid.innerHTML = '<p class="empty">No hay platillos en esta categoría por ahora.</p>';
+    return;
+  }
+
+  lista.forEach((p, i) => {
+    const card = document.createElement('article');
+    card.className = 'card';
+    card.innerHTML = `
+      <div class="card__media">
+        <span class="card__tag">${p.catName}</span>
+        <img src="${p.img}" alt="${p.name}" loading="lazy"
+             onerror="this.onerror=null;this.src='${FALLBACK}';">
+      </div>
+      <div class="card__body">
+        <h3 class="card__name">${p.name}</h3>
+        <p class="card__desc">${p.desc}</p>
+        <div class="card__foot">
+          <span class="card__meta">${p.catName}</span>
+          <span class="card__price"><small>$</small>${p.price}</span>
+        </div>
+      </div>`;
+    grid.appendChild(card);
+
+    /* animación de entrada escalonada */
+    requestAnimationFrame(() => {
+      setTimeout(() => card.classList.add('is-in'), 60 * i);
+    });
+  });
+}
+
+/* ============================================================
+   FILTRADO POR CATEGORÍAS
+   ============================================================ */
+const tabs = document.querySelectorAll('.tab');
+tabs.forEach(tab => {
+  tab.addEventListener('click', () => {
+    tabs.forEach(t => { t.classList.remove('is-active'); t.setAttribute('aria-selected','false'); });
+    tab.classList.add('is-active');
+    tab.setAttribute('aria-selected','true');
+    render(tab.dataset.filter);
+  });
+});
+
+/* ============================================================
+   SOMBRA DE LA NAV AL HACER SCROLL
+   ============================================================ */
+const nav = document.getElementById('nav');
+const observer = new IntersectionObserver(
+  ([e]) => nav.classList.toggle('is-stuck', e.intersectionRatio < 1),
+  { threshold:[1] }
+);
+/* centinela para detectar cuando la nav queda "pegada" */
+const sentinel = document.createElement('div');
+nav.parentNode.insertBefore(sentinel, nav);
+observer.observe(sentinel);
+
+/* Render inicial */
+render('todos');
+</script>
+
+<!-- Conmutador de idioma ES / EN (traducción persistente entre páginas) -->
+<script src="i18n.js"></script>
+</body>
+</html>
